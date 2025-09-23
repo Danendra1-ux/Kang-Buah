@@ -1,0 +1,131 @@
+.company-values {
+  padding: 6rem 0;
+  background: linear-gradient(135deg, #f5f3f0 0%, #ebe8e3 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.company-values::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(circle at 80% 20%, rgba(255, 107, 53, 0.06) 0%, transparent 50%),
+    radial-gradient(circle at 20% 80%, rgba(124, 179, 66, 0.06) 0%, transparent 50%);
+  z-index: 1;
+}
+
+.values-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+.values-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #5a6c57;
+  text-align: center;
+  margin-bottom: 3rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2.5rem;
+  margin-bottom: 4rem;
+}
+
+.value-card {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 2.5rem;
+  border-radius: 25px;
+  text-align: center;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-top: 5px solid #7cb342;
+  position: relative;
+}
+
+.value-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+}
+
+.value-card:nth-child(1) {
+  border-top-color: #ff6b35;
+}
+
+.value-card:nth-child(2) {
+  border-top-color: #ffd23f;
+}
+
+.value-card:nth-child(3) {
+  border-top-color: #7cb342;
+}
+
+.value-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1.5rem;
+  background: linear-gradient(135deg, #f8f6f3, #e8e6e1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.icon-chat,
+.icon-quality,
+.icon-partnership {
+  font-size: 2.5rem;
+}
+
+.value-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #4a5647;
+  margin-bottom: 1rem;
+}
+
+.value-description {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #5a6c57;
+  margin: 0;
+}
+
+.company-footer {
+  text-align: center;
+  padding-top: 2rem;
+  border-top: 2px solid rgba(124, 179, 66, 0.2);
+}
+
+.company-footer p {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #5a6c57;
+  margin: 0;
+  letter-spacing: 1px;
+}
+
+@media (max-width: 768px) {
+  .values-title {
+    font-size: 2rem;
+  }
+
+  .values-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .value-card {
+    padding: 2rem;
+  }
+}

@@ -1,0 +1,136 @@
+.market-segments {
+  position: relative;
+  padding: 100px 0;
+  background: linear-gradient(135deg, #e0f2e0 0%, #d0e8d0 100%);
+  overflow: hidden;
+}
+
+.segments-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.segments-background .organic-shape {
+  position: absolute;
+  border-radius: 70% 30% 50% 80%;
+  opacity: 0.08;
+}
+
+.segments-background .shape-1 {
+  width: 320px;
+  height: 240px;
+  background: #4a7c59;
+  top: 10%;
+  left: -8%;
+  animation: float 24s ease-in-out infinite;
+}
+
+.segments-background .shape-2 {
+  width: 280px;
+  height: 200px;
+  background: #f4a261;
+  top: 60%;
+  right: -6%;
+  animation: float 30s ease-in-out infinite reverse;
+}
+
+.segments-background .shape-3 {
+  width: 220px;
+  height: 160px;
+  background: #2a9d8f;
+  bottom: 15%;
+  left: 40%;
+  animation: float 26s ease-in-out infinite;
+}
+
+.segments-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  position: relative;
+  z-index: 2;
+}
+
+.segments-title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: #4a7c59;
+  text-align: center;
+  margin-bottom: 60px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  letter-spacing: 2px;
+}
+
+.segments-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.segment-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 40px 30px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  backdrop-filter: blur(10px);
+}
+
+.segment-card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  border-color: #4a7c59;
+}
+
+.segment-icon {
+  font-size: 3.5rem;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.segment-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #2d5016;
+  margin-bottom: 15px;
+  line-height: 1.4;
+}
+
+.segment-description {
+  font-size: 1rem;
+  color: #666;
+  line-height: 1.6;
+  margin: 0;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(6deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .segments-title {
+    font-size: 2.5rem;
+  }
+
+  .segments-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .segment-card {
+    padding: 30px 20px;
+  }
+}
