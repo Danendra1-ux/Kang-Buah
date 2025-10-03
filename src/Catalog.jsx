@@ -67,7 +67,7 @@ const Catalog = () => {
   }
 
   return (
-    <section className="catalog-section">
+    <section className="catalog-section" id="catalog">
       <div className="catalog-background">
         <div className="organic-shapes">
           <div className="shape shape-1"></div>
