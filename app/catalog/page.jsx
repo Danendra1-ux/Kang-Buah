@@ -1,23 +1,60 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Link } from "react-router-dom"
-import StepNavigation from "../../src/StepNavigation"
-import "./catalog.css"
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import StepNavigation from "../../src/StepNavigation";
+import "./catalog.css";
 
 const CatalogPage = () => {
-  const [activeCategory, setActiveCategory] = useState("fruits")
-  const [currentPage, setCurrentPage] = useState(1)
-  const [sortBy, setSortBy] = useState("name")
-  const [showChat, setShowChat] = useState(false)
-  const itemsPerPage = 12
+  const [activeCategory, setActiveCategory] = useState("fruits");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [sortBy, setSortBy] = useState("name");
+  const [showChat, setShowChat] = useState(false);
+  const itemsPerPage = 12;
+
+  const handleLogout = () => {
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("role"); // clear role on logout
+    router.replace("/login");
+  };
+
   const products = {
     vegetables: [
-      { id: 1, name: "Wortel 1kg", image: "/fresh-carrots.png", price: 15000, unit: "1kg" },
-      { id: 2, name: "Kentang 5kg", image: "/fresh-potatoes.png", price: 45000, unit: "5kg" },
-      { id: 3, name: "Tomat 1kg", image: "/red-chili-peppers.jpg", price: 12000, unit: "1kg" },
-      { id: 4, name: "Brokoli 1kg", image: "/fresh-broccoli.png", price: 25000, unit: "1kg" },
-      { id: 5, name: "Cabe Merah Keriting", image: "/red-chili-peppers.jpg", price: 35000, unit: "1kg" },
+      {
+        id: 1,
+        name: "Wortel 1kg",
+        image: "/fresh-carrots.png",
+        price: 15000,
+        unit: "1kg",
+      },
+      {
+        id: 2,
+        name: "Kentang 5kg",
+        image: "/fresh-potatoes.png",
+        price: 45000,
+        unit: "5kg",
+      },
+      {
+        id: 3,
+        name: "Tomat 1kg",
+        image: "/red-chili-peppers.jpg",
+        price: 12000,
+        unit: "1kg",
+      },
+      {
+        id: 4,
+        name: "Brokoli 1kg",
+        image: "/fresh-broccoli.png",
+        price: 25000,
+        unit: "1kg",
+      },
+      {
+        id: 5,
+        name: "Cabe Merah Keriting",
+        image: "/red-chili-peppers.jpg",
+        price: 35000,
+        unit: "1kg",
+      },
       {
         id: 6,
         name: "Cabe Merah Besar",
@@ -32,8 +69,20 @@ const CatalogPage = () => {
         price: 28000,
         unit: "1kg",
       },
-      { id: 8, name: "Kol Putih", image: "/white-cabbage.jpg", price: 8000, unit: "1kg" },
-      { id: 9, name: "Kembang Kol Impor", image: "/fresh-cauliflower.jpg", price: 22000, unit: "1kg" },
+      {
+        id: 8,
+        name: "Kol Putih",
+        image: "/white-cabbage.jpg",
+        price: 8000,
+        unit: "1kg",
+      },
+      {
+        id: 9,
+        name: "Kembang Kol Impor",
+        image: "/fresh-cauliflower.jpg",
+        price: 22000,
+        unit: "1kg",
+      },
       {
         id: 10,
         name: "Jamur Champignon",
@@ -41,9 +90,27 @@ const CatalogPage = () => {
         price: 35000,
         unit: "500g",
       },
-      { id: 11, name: "Wortel Baby", image: "/fresh-carrots.png", price: 18000, unit: "500g" },
-      { id: 12, name: "Kentang Merah", image: "/fresh-potatoes.png", price: 20000, unit: "1kg" },
-      { id: 13, name: "Brokoli Organik", image: "/fresh-broccoli.png", price: 35000, unit: "1kg" },
+      {
+        id: 11,
+        name: "Wortel Baby",
+        image: "/fresh-carrots.png",
+        price: 18000,
+        unit: "500g",
+      },
+      {
+        id: 12,
+        name: "Kentang Merah",
+        image: "/fresh-potatoes.png",
+        price: 20000,
+        unit: "1kg",
+      },
+      {
+        id: 13,
+        name: "Brokoli Organik",
+        image: "/fresh-broccoli.png",
+        price: 35000,
+        unit: "1kg",
+      },
       {
         id: 14,
         name: "Cabe Rawit Hijau",
@@ -67,7 +134,13 @@ const CatalogPage = () => {
         price: 25000,
         unit: "1 buah",
       },
-      { id: 17, name: "Melon Sky Rocket", image: "/cantaloupe-melon.png", price: 35000, unit: "1 buah" },
+      {
+        id: 17,
+        name: "Melon Sky Rocket",
+        image: "/cantaloupe-melon.png",
+        price: 35000,
+        unit: "1 buah",
+      },
       {
         id: 18,
         name: "Pepaya Kalifornia",
@@ -75,71 +148,111 @@ const CatalogPage = () => {
         price: 15000,
         unit: "1 buah",
       },
-      { id: 19, name: "Nanas Sunpride", image: "/fresh-pineapple.jpg", price: 20000, unit: "1 buah" },
-      { id: 20, name: "Pisang Sunpride", image: "/fresh-bananas.jpg", price: 18000, unit: "1 sisir" },
+      {
+        id: 19,
+        name: "Nanas Sunpride",
+        image: "/fresh-pineapple.jpg",
+        price: 20000,
+        unit: "1 buah",
+      },
+      {
+        id: 20,
+        name: "Pisang Sunpride",
+        image: "/fresh-bananas.jpg",
+        price: 18000,
+        unit: "1 sisir",
+      },
     ],
     special: [
-      { id: 21, name: "Beras Premium", image: "/white-rice-grains.jpg", price: 85000, unit: "5kg" },
-      { id: 22, name: "Minyak Goreng", image: "/cooking-oil-bottle.png", price: 45000, unit: "2L" },
-      { id: 23, name: "Ayam Boiler", image: "/fresh-chicken.png", price: 35000, unit: "1kg" },
-      { id: 24, name: "Telur Ayam Negeri", image: "/fresh-chicken-eggs.jpg", price: 28000, unit: "1kg" },
+      {
+        id: 21,
+        name: "Beras Premium",
+        image: "/white-rice-grains.jpg",
+        price: 85000,
+        unit: "5kg",
+      },
+      {
+        id: 22,
+        name: "Minyak Goreng",
+        image: "/cooking-oil-bottle.png",
+        price: 45000,
+        unit: "2L",
+      },
+      {
+        id: 23,
+        name: "Ayam Boiler",
+        image: "/fresh-chicken.png",
+        price: 35000,
+        unit: "1kg",
+      },
+      {
+        id: 24,
+        name: "Telur Ayam Negeri",
+        image: "/fresh-chicken-eggs.jpg",
+        price: 28000,
+        unit: "1kg",
+      },
     ],
-  }
+  };
 
   const categories = [
     { id: "fruits", name: "Buah-buahan", count: products.fruits.length },
     { id: "vegetables", name: "Sayuran", count: products.vegetables.length },
-    { id: "special", name: "Permintaan Khusus", count: products.special.length },
-  ]
+    {
+      id: "special",
+      name: "Permintaan Khusus",
+      count: products.special.length,
+    },
+  ];
 
   const getFilteredProducts = () => {
-    let filtered = products[activeCategory] || []
+    let filtered = products[activeCategory] || [];
 
     // Sort products
     filtered = [...filtered].sort((a, b) => {
       switch (sortBy) {
         case "price-low":
-          return a.price - b.price
+          return a.price - b.price;
         case "price-high":
-          return b.price - a.price
+          return b.price - a.price;
         default:
-          return a.name.localeCompare(b.name)
+          return a.name.localeCompare(b.name);
       }
-    })
+    });
 
-    return filtered
-  }
+    return filtered;
+  };
 
   const getCurrentPageProducts = () => {
-    const filtered = getFilteredProducts()
-    const startIndex = (currentPage - 1) * itemsPerPage
-    return filtered.slice(startIndex, startIndex + itemsPerPage)
-  }
+    const filtered = getFilteredProducts();
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return filtered.slice(startIndex, startIndex + itemsPerPage);
+  };
 
   const getTotalPages = () => {
-    return Math.ceil(getFilteredProducts().length / itemsPerPage)
-  }
+    return Math.ceil(getFilteredProducts().length / itemsPerPage);
+  };
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat("id-ID", {
       style: "currency",
       currency: "IDR",
       minimumFractionDigits: 0,
-    }).format(price)
-  }
+    }).format(price);
+  };
 
   const getCategoryTitle = () => {
     switch (activeCategory) {
       case "fruits":
-        return "Buah-buahan"
+        return "Buah-buahan";
       case "vegetables":
-        return "Sayuran"
+        return "Sayuran";
       case "special":
-        return "Permintaan Khusus"
+        return "Permintaan Khusus";
       default:
-        return "Produk"
+        return "Produk";
     }
-  }
+  };
 
   return (
     <div className="catalog-page">
@@ -152,26 +265,21 @@ const CatalogPage = () => {
                 <span className="logo-ans">ANS</span>
               </Link>
             </div>
+
             <nav className="header-nav">
-              <Link to="/" className="nav-item">
+              <Link to="/HomePage" className="nav-item">
                 Beranda
-              </Link>
-              <Link to="#" className="nav-item">
-                Tentang
-              </Link>
-              <Link to="#" className="nav-item">
-                Visi & Misi
-              </Link>
-              <Link to="#" className="nav-item">
-                Nilai
               </Link>
               <Link to="/catalog" className="nav-item active">
                 Katalog
               </Link>
-              <Link to="#" className="nav-item">
-                Kontak
-              </Link>
             </nav>
+
+            <div className="nav-right">
+              <button className="logout-btn" onClick={handleLogout}>
+                Logout
+              </button>
+            </div>
           </div>
         </div>
       </header>
@@ -190,10 +298,12 @@ const CatalogPage = () => {
                   {categories.map((category) => (
                     <button
                       key={category.id}
-                      className={`category-item ${activeCategory === category.id ? "active" : ""}`}
+                      className={`category-item ${
+                        activeCategory === category.id ? "active" : ""
+                      }`}
                       onClick={() => {
-                        setActiveCategory(category.id)
-                        setCurrentPage(1)
+                        setActiveCategory(category.id);
+                        setCurrentPage(1);
                       }}
                     >
                       <span className="category-name">{category.name}</span>
@@ -211,7 +321,8 @@ const CatalogPage = () => {
                 <div className="products-title-section">
                   <h1 className="products-title">{getCategoryTitle()}</h1>
                   <p className="products-description">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                    do eiusmod tempor
                   </p>
                 </div>
 
@@ -222,10 +333,16 @@ const CatalogPage = () => {
                   </div>
 
                   <div className="sort-controls">
-                    <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="sort-select">
+                    <select
+                      value={sortBy}
+                      onChange={(e) => setSortBy(e.target.value)}
+                      className="sort-select"
+                    >
                       <option value="name">Urutkan</option>
                       <option value="price-low">Harga: Rendah ke Tinggi</option>
-                      <option value="price-high">Harga: Tinggi ke Rendah</option>
+                      <option value="price-high">
+                        Harga: Tinggi ke Rendah
+                      </option>
                     </select>
 
                     <select className="filter-select">
@@ -242,12 +359,18 @@ const CatalogPage = () => {
                 {getCurrentPageProducts().map((product) => (
                   <div key={product.id} className="product-card">
                     <div className="product-image-container">
-                      <img src={product.image || "/placeholder.svg"} alt={product.name} className="product-image" />
+                      <img
+                        src={product.image || "/placeholder.svg"}
+                        alt={product.name}
+                        className="product-image"
+                      />
                     </div>
                     <div className="product-info">
                       <h3 className="product-name">{product.name}</h3>
                       <div className="product-price-section">
-                        <span className="product-price">{formatPrice(product.price)}</span>
+                        <span className="product-price">
+                          {formatPrice(product.price)}
+                        </span>
                         <span className="product-unit">/{product.unit}</span>
                       </div>
                       <button className="product-detail-btn">Detail</button>
@@ -266,15 +389,19 @@ const CatalogPage = () => {
                   ←
                 </button>
 
-                {Array.from({ length: getTotalPages() }, (_, i) => i + 1).map((page) => (
-                  <button
-                    key={page}
-                    className={`pagination-btn ${currentPage === page ? "active" : ""}`}
-                    onClick={() => setCurrentPage(page)}
-                  >
-                    {page}
-                  </button>
-                ))}
+                {Array.from({ length: getTotalPages() }, (_, i) => i + 1).map(
+                  (page) => (
+                    <button
+                      key={page}
+                      className={`pagination-btn ${
+                        currentPage === page ? "active" : ""
+                      }`}
+                      onClick={() => setCurrentPage(page)}
+                    >
+                      {page}
+                    </button>
+                  )
+                )}
 
                 <button
                   className="pagination-btn"
@@ -298,7 +425,8 @@ const CatalogPage = () => {
                 <span className="logo-ans">ANS</span>
               </div>
               <p className="footer-description">
-                Menjaga Kualitas Buah Segar Berkualitas untuk Kebutuhan Pelanggan Setiap Hari
+                Menjaga Kualitas Buah Segar Berkualitas untuk Kebutuhan
+                Pelanggan Setiap Hari
               </p>
             </div>
 
@@ -356,7 +484,10 @@ const CatalogPage = () => {
 
       {/* Floating Chat Button */}
       <div className="floating-chat">
-        <button className="chat-toggle-btn" onClick={() => setShowChat(!showChat)}>
+        <button
+          className="chat-toggle-btn"
+          onClick={() => setShowChat(!showChat)}
+        >
           💬
         </button>
 
@@ -364,25 +495,31 @@ const CatalogPage = () => {
           <div className="chat-popup">
             <div className="chat-header">
               <h4>Konsultasi</h4>
-              <button className="chat-close-btn" onClick={() => setShowChat(false)}>
+              <button
+                className="chat-close-btn"
+                onClick={() => setShowChat(false)}
+              >
                 ×
               </button>
             </div>
             <div className="chat-messages">
               <div className="message admin-message">
                 <div className="message-content">
-                  Halo! Selamat datang di CV Agro Niaga Sejahtera. Ada yang bisa kami bantu?
+                  Halo! Selamat datang di CV Agro Niaga Sejahtera. Ada yang bisa
+                  kami bantu?
                 </div>
                 <div className="message-time">10:30</div>
               </div>
               <div className="message user-message">
-                <div className="message-content">Saya ingin konsultasi tentang kebutuhan sayuran untuk restoran</div>
+                <div className="message-content">
+                  Saya ingin konsultasi tentang kebutuhan sayuran untuk restoran
+                </div>
                 <div className="message-time">10:32</div>
               </div>
               <div className="message admin-message">
                 <div className="message-content">
-                  Tentu! Kami siap membantu kebutuhan sayuran untuk restoran Anda. Berapa kapasitas yang dibutuhkan per
-                  hari?
+                  Tentu! Kami siap membantu kebutuhan sayuran untuk restoran
+                  Anda. Berapa kapasitas yang dibutuhkan per hari?
                 </div>
                 <div className="message-time">10:33</div>
               </div>
@@ -395,7 +532,7 @@ const CatalogPage = () => {
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default CatalogPage
+export default CatalogPage;

@@ -33,11 +33,16 @@ export default function LoginPage() {
 
       console.log("Login success:", res.data)
 
-      // Simpan token dari response backend
+      // Simpan token & role dari response backend
       localStorage.setItem("token", res.data.accessToken)
+      localStorage.setItem("role", res.data.role)
 
-      // Redirect setelah login
-      window.location.href = "/catalog"
+      // Redirect berdasarkan role
+      if (res.data.role === "admin") {
+        window.location.href = "/admin/catalog"
+      } else {
+        window.location.href = "/catalog"
+      }
     } catch (err) {
       if (err.response) {
         console.error("Error response:", err.response.data)
@@ -49,7 +54,7 @@ export default function LoginPage() {
     }
   }
 
-    // ===== LOGIN GOOGLE =====
+  // ===== LOGIN GOOGLE =====
   const handleGoogleLogin = async () => {
     try {
       const result = await signInWithPopup(auth, googleProvider)
@@ -57,9 +62,17 @@ export default function LoginPage() {
 
       const res = await axios.post("http://localhost:3000/auth/google/login", { token })
 
-      console.log("Google signup success:", res.data)
-      alert("Login dengan Google berhasil!")
-      window.location.href = "/HomePage"
+      console.log("Google login success:", res.data)
+
+      localStorage.setItem("token", res.data.accessToken)
+      localStorage.setItem("role", res.data.role)
+
+      // Redirect berdasarkan role
+      if (res.data.role === "admin") {
+        window.location.href = "/admin/catalog"
+      } else {
+        window.location.href = "/catalog"
+      }
     } catch (err) {
       console.error("Google Login error:", err)
       alert("Gagal login dengan Google")
@@ -108,15 +121,24 @@ export default function LoginPage() {
                   placeholder="••••••••"
                   required
                 />
-                <button type="button" className="password-toggle" onClick={() => setShowPassword(!showPassword)}>
-                  Tampilkan
+                <button
+                  type="button"
+                  className="password-toggle"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? "Sembunyikan" : "Tampilkan"}
                 </button>
               </div>
             </div>
 
             <div className="form-options">
               <label className="checkbox-container">
-                <input type="checkbox" name="rememberMe" checked={formData.rememberMe} onChange={handleInputChange} />
+                <input
+                  type="checkbox"
+                  name="rememberMe"
+                  checked={formData.rememberMe}
+                  onChange={handleInputChange}
+                />
                 <span className="checkmark"></span>
                 Ingat saya
               </label>
@@ -133,7 +155,11 @@ export default function LoginPage() {
               <span>atau</span>
             </div>
 
-            <button type="button" className="google-auth-btn" onClick={handleGoogleLogin}>
+            <button
+              type="button"
+              className="google-auth-btn"
+              onClick={handleGoogleLogin}
+            >
               <svg width="20" height="20" viewBox="0 0 24 24">
                 <path
                   fill="#4285F4"

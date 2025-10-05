@@ -9,9 +9,7 @@
   backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   position: sticky;
-  top: 0;
-  z-index: 100;
-  padding: 1rem 0;
+  padding: 10px 20px;
 }
 
 /* Updated header content to use two-column layout without nav buttons */
@@ -21,7 +19,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 2rem;
 }
 
 .nav-logo .logo-ans {
@@ -35,8 +32,10 @@
 }
 
 .header-nav {
+  flex: 2;
+  gap: 20px;
   display: flex;
-  gap: 2rem;
+  justify-content: center;
 }
 
 .nav-item {
@@ -652,4 +651,29 @@
   .products-title {
     font-size: 2rem;
   }
+}
+
+.nav-right {
+  position: absolute;
+  right: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.logout-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  border: 2px solid #4caf50;
+  background: #ffffff;
+  color: #4caf50;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.logout-btn:hover {
+  background: #4caf50;
+  color: #ffffff;
+  transform: translateY(-1px);
 }
