@@ -3,21 +3,17 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
 import axios from "axios"
-import { auth, googleProvider } from "../../src/utils/firebase"
+import { auth, googleProvider } from "../../utils/firebase"
 import { signInWithPopup } from "firebase/auth"
-import "./register.css"
+import "./login.css"
 
-export default function RegisterPage() {
+export default function LoginPage() {
   const [formData, setFormData] = useState({
-    name: "",
     email: "",
-    phone: "",
     password: "",
-    confirmPassword: "",
-    agreeToTerms: false,
+    rememberMe: false,
   })
   const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target
@@ -27,52 +23,61 @@ export default function RegisterPage() {
     }))
   }
 
-  // ===== REGISTER MANUAL =====
   const handleSubmit = async (e) => {
     e.preventDefault()
-
-    if (formData.password !== formData.confirmPassword) {
-      alert("Password dan konfirmasi password tidak sama!")
-      return
-    }
-
     try {
-      const res = await axios.post("http://localhost:3000/auth/register", {
+      const res = await axios.post("http://localhost:3000/auth/login", {
         email: formData.email,
         password: formData.password,
-        confirmPassword: formData.confirmPassword,
-        username: formData.name,
-        phone_number: formData.phone,
-        company_name: null,
-        npwp: null,
       })
 
-      console.log("Signup success:", res.data)
-      alert("Registrasi berhasil! Silakan cek email untuk verifikasi lalu login.")
-      window.location.href = "/login"
+      console.log("Login success:", res.data)
+
+      // Simpan token & role dari response backend
+      localStorage.setItem("token", res.data.accessToken)
+      localStorage.setItem("role", res.data.role)
+
+      // Redirect berdasarkan role
+      if (res.data.role === "admin") {
+        window.location.href = "/admin/catalog"
+      } else {
+        window.location.href = "/catalog"
+      }
     } catch (err) {
-      console.error("Signup error:", err)
-      alert(err.response?.data?.message || "Signup gagal")
+      if (err.response) {
+        console.error("Error response:", err.response.data)
+        alert(err.response.data.message || "Email atau password salah")
+      } else {
+        console.error("Error:", err.message)
+        alert("Terjadi kesalahan jaringan")
+      }
     }
   }
 
-  // ===== REGISTER/LOGIN GOOGLE =====
-  const handleGoogleRegister = async () => {
+  // ===== LOGIN GOOGLE =====
+  const handleGoogleLogin = async () => {
     try {
       const result = await signInWithPopup(auth, googleProvider)
       const token = await result.user.getIdToken()
 
       const res = await axios.post("http://localhost:3000/auth/google/login", { token })
 
-      console.log("Google signup success:", res.data)
-      alert("Login dengan Google berhasil!")
-      window.location.href = "/HomePage"
+      console.log("Google login success:", res.data)
+
+      localStorage.setItem("token", res.data.accessToken)
+      localStorage.setItem("role", res.data.role)
+
+      // Redirect berdasarkan role
+      if (res.data.role === "admin") {
+        window.location.href = "/admin/catalog"
+      } else {
+        window.location.href = "/catalog"
+      }
     } catch (err) {
-      console.error("Google signup error:", err)
-      alert("Gagal daftar dengan Google")
+      console.error("Google Login error:", err)
+      alert("Gagal login dengan Google")
     }
   }
-
 
   return (
     <div className="auth-container">
@@ -86,24 +91,11 @@ export default function RegisterPage() {
       <div className="auth-content">
         <div className="auth-form-container">
           <div className="auth-header">
-            <h1>Bergabung dengan kami</h1>
-            <p>Dapatkan usaha supplier buah harga</p>
+            <h1>Selamat Datang</h1>
+            <p>Masuk ke akun anda</p>
           </div>
 
           <form onSubmit={handleSubmit} className="auth-form">
-            <div className="form-group">
-              <label htmlFor="name">Nama</label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                placeholder="Kang Buah"
-                required
-              />
-            </div>
-
             <div className="form-group">
               <label htmlFor="email">Email</label>
               <input
@@ -113,19 +105,6 @@ export default function RegisterPage() {
                 value={formData.email}
                 onChange={handleInputChange}
                 placeholder="supplier.buah@gmail.com"
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="phone">No. Telepon</label>
-              <input
-                type="tel"
-                id="phone"
-                name="phone"
-                value={formData.phone}
-                onChange={handleInputChange}
-                placeholder="+62 812345678"
                 required
               />
             </div>
@@ -142,53 +121,45 @@ export default function RegisterPage() {
                   placeholder="••••••••"
                   required
                 />
-                <button type="button" className="password-toggle" onClick={() => setShowPassword(!showPassword)}>
-                  Tampilkan
-                </button>
-              </div>
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="confirmPassword">Konfirmasi Kata Sandi</label>
-              <div className="password-input-container">
-                <input
-                  type={showConfirmPassword ? "text" : "password"}
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleInputChange}
-                  placeholder="••••••••"
-                  required
-                />
                 <button
                   type="button"
                   className="password-toggle"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  onClick={() => setShowPassword(!showPassword)}
                 >
-                  Tampilkan
+                  {showPassword ? "Sembunyikan" : "Tampilkan"}
                 </button>
               </div>
             </div>
 
-            <div className="terms-container">
+            <div className="form-options">
               <label className="checkbox-container">
                 <input
                   type="checkbox"
-                  name="agreeToTerms"
-                  checked={formData.agreeToTerms}
+                  name="rememberMe"
+                  checked={formData.rememberMe}
                   onChange={handleInputChange}
-                  required
                 />
                 <span className="checkmark"></span>
-                Saya setuju dengan Syarat Ketentuan & Kebijakan Privasi
+                Ingat saya
               </label>
+              <Link to="/forgot-password" className="forgot-password">
+                Forgot password?
+              </Link>
             </div>
 
             <button type="submit" className="auth-submit-btn">
-              Daftar
+              Masuk
             </button>
 
-            <button type="button" className="google-auth-btn" onClick={handleGoogleRegister}>
+            <div className="auth-divider">
+              <span>atau</span>
+            </div>
+
+            <button
+              type="button"
+              className="google-auth-btn"
+              onClick={handleGoogleLogin}
+            >
               <svg width="20" height="20" viewBox="0 0 24 24">
                 <path
                   fill="#4285F4"
@@ -207,13 +178,13 @@ export default function RegisterPage() {
                   d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                 />
               </svg>
-              Daftar dengan Google
+              Masuk dengan Google
             </button>
 
             <div className="auth-footer">
-              <span>Sudah punya akun? </span>
-              <Link to="/login" className="auth-link">
-                Masuk
+              <span>Belum punya akun? </span>
+              <Link to="/register" className="auth-link">
+                Buat akun
               </Link>
             </div>
           </form>
@@ -222,4 +193,3 @@ export default function RegisterPage() {
     </div>
   )
 }
-

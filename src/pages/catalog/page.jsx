@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import StepNavigation from "../../src/StepNavigation";
+import StepNavigation from "../../components/StepNavigation";
 import "./catalog.css";
 
 const CatalogPage = () => {
