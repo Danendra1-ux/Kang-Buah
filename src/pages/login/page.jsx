@@ -1,83 +1,84 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Link } from "react-router-dom"
-import axios from "axios"
-import { auth, googleProvider } from "../../utils/firebase"
-import { signInWithPopup } from "firebase/auth"
-import "./login.css"
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { auth, googleProvider } from "../../utils/firebase";
+import { signInWithPopup } from "firebase/auth";
+import "./login.css";
 
 export default function LoginPage() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
     rememberMe: false,
-  })
-  const [showPassword, setShowPassword] = useState(false)
+  });
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target
+    const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
-    }))
-  }
+    }));
+  };
 
+  // ===== LOGIN EMAIL & PASSWORD =====
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
+    setLoading(true);
     try {
       const res = await axios.post("http://localhost:3000/auth/login", {
         email: formData.email,
         password: formData.password,
-      })
+      });
 
-      console.log("Login success:", res.data)
+      const storage = formData.rememberMe ? localStorage : sessionStorage;
+      storage.setItem("accessToken", res.data.accessToken);
+      storage.setItem("role", res.data.role);
 
-      // Simpan token & role dari response backend
-      localStorage.setItem("token", res.data.accessToken)
-      localStorage.setItem("role", res.data.role)
-
-      // Redirect berdasarkan role
       if (res.data.role === "admin") {
-        window.location.href = "/admin/catalog"
+        navigate("/admin/catalog");
       } else {
-        window.location.href = "/catalog"
+        navigate("/catalog");
       }
     } catch (err) {
-      if (err.response) {
-        console.error("Error response:", err.response.data)
-        alert(err.response.data.message || "Email atau password salah")
-      } else {
-        console.error("Error:", err.message)
-        alert("Terjadi kesalahan jaringan")
-      }
+      alert(err.response?.data?.message || "Email atau password salah");
+    } finally {
+      setLoading(false);
     }
-  }
+  };
 
   // ===== LOGIN GOOGLE =====
   const handleGoogleLogin = async () => {
+    setLoading(true);
     try {
-      const result = await signInWithPopup(auth, googleProvider)
-      const token = await result.user.getIdToken()
+      const result = await signInWithPopup(auth, googleProvider);
+      const token = await result.user.getIdToken();
 
-      const res = await axios.post("http://localhost:3000/auth/google/login", { token })
+      const res = await axios.post("http://localhost:3000/auth/google/login", {
+        token,
+      });
 
-      console.log("Google login success:", res.data)
+      localStorage.setItem("accessToken", res.data.accessToken);
+      localStorage.setItem("role", res.data.role);
 
-      localStorage.setItem("token", res.data.accessToken)
-      localStorage.setItem("role", res.data.role)
-
-      // Redirect berdasarkan role
       if (res.data.role === "admin") {
-        window.location.href = "/admin/catalog"
+        navigate("/admin/catalog");
       } else {
-        window.location.href = "/catalog"
+        navigate("/catalog");
       }
     } catch (err) {
-      console.error("Google Login error:", err)
-      alert("Gagal login dengan Google")
+      console.error("Google Login error:", err);
+      alert(
+        err.response?.data?.message || "Gagal login dengan Google, coba lagi."
+      );
+    } finally {
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="auth-container">
@@ -147,8 +148,12 @@ export default function LoginPage() {
               </Link>
             </div>
 
-            <button type="submit" className="auth-submit-btn">
-              Masuk
+            <button
+              type="submit"
+              className="auth-submit-btn"
+              disabled={loading}
+            >
+              {loading ? "Loading..." : "Masuk"}
             </button>
 
             <div className="auth-divider">
@@ -159,6 +164,7 @@ export default function LoginPage() {
               type="button"
               className="google-auth-btn"
               onClick={handleGoogleLogin}
+              disabled={loading}
             >
               <svg width="20" height="20" viewBox="0 0 24 24">
                 <path
@@ -191,5 +197,5 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

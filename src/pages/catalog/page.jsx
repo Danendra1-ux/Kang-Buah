@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import StepNavigation from "../../components/StepNavigation";
+import Header from "../../components/Navbar"; 
+import Footer from "../../components/Footer";
 import "./catalog.css";
 
 const CatalogPage = () => {
@@ -256,33 +258,8 @@ const CatalogPage = () => {
 
   return (
     <div className="catalog-page">
-      {/* Header */}
-      <header className="catalog-header">
-        <div className="container">
-          <div className="header-content">
-            <div className="nav-logo">
-              <Link to="/" className="logo">
-                <span className="logo-ans">ANS</span>
-              </Link>
-            </div>
-
-            <nav className="header-nav">
-              <Link to="/HomePage" className="nav-item">
-                Beranda
-              </Link>
-              <Link to="/catalog" className="nav-item active">
-                Katalog
-              </Link>
-            </nav>
-
-            <div className="nav-right">
-              <button className="logout-btn" onClick={handleLogout}>
-                Logout
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
+      {/* Header */}      
+      <Header />
 
       <StepNavigation currentStep={1} />
 
@@ -417,70 +394,7 @@ const CatalogPage = () => {
       </main>
 
       {/* Footer */}
-      <footer className="catalog-footer">
-        <div className="container">
-          <div className="footer-content">
-            <div className="footer-section">
-              <div className="footer-logo">
-                <span className="logo-ans">ANS</span>
-              </div>
-              <p className="footer-description">
-                Menjaga Kualitas Buah Segar Berkualitas untuk Kebutuhan
-                Pelanggan Setiap Hari
-              </p>
-            </div>
-
-            <div className="footer-section">
-              <h4>Produk</h4>
-              <ul className="footer-links">
-                <li>
-                  <a href="#">Buah Segar Lokal</a>
-                </li>
-                <li>
-                  <a href="#">Sayuran</a>
-                </li>
-                <li>
-                  <a href="#">Layanan Konsultasi</a>
-                </li>
-              </ul>
-            </div>
-
-            <div className="footer-section">
-              <h4>Perusahaan</h4>
-              <ul className="footer-links">
-                <li>
-                  <a href="#">Tentang Kami</a>
-                </li>
-                <li>
-                  <a href="#">Karir</a>
-                </li>
-                <li>
-                  <a href="#">Kontak</a>
-                </li>
-              </ul>
-            </div>
-
-            <div className="footer-section">
-              <h4>Dukungan</h4>
-              <ul className="footer-links">
-                <li>
-                  <a href="#">Pusat Bantuan</a>
-                </li>
-                <li>
-                  <a href="#">FAQ</a>
-                </li>
-                <li>
-                  <a href="#">Syarat & Ketentuan</a>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="footer-bottom">
-            <p>&copy; 2025 Kang Buah. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
 
       {/* Floating Chat Button */}
       <div className="floating-chat">
