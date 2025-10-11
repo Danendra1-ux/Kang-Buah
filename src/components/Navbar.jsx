@@ -17,16 +17,14 @@ export default function Navbar() {
     const role =
       localStorage.getItem("role") || sessionStorage.getItem("role");
 
-    if (token) {
+    if (token && token !== "undefined" && token !== "null") {
       try {
         const decoded = decodeJwt(token);
-        setUser({ ...decoded, role, token });
+        if (decoded) {
+          setUser({ ...decoded, role, token });
+        }
       } catch (err) {
-        console.error("Token invalid:", err);
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("role");
-        sessionStorage.removeItem("accessToken");
-        sessionStorage.removeItem("role");
+        console.error("Token invalid:", err.message);
       }
     }
   }, []);
@@ -40,7 +38,6 @@ export default function Navbar() {
     navigate("/");
   };
 
-  // tutup dropdown jika klik di luar menu
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
